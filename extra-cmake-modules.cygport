@@ -1,7 +1,7 @@
-inherit cmake
+inherit cmake python2
 
 NAME="extra-cmake-modules"
-VERSION=5.27.0
+VERSION=5.35.0
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Extra CMake Modules for KDE"
@@ -12,6 +12,9 @@ module is to reduce duplication in CMake scripts across KDE software, it is
 intended to be useful for any software that uses the CMake build system."
 HOMEPAGE="http://www.kde.org/"
 SRC_URI="mirror://kde/stable/frameworks/${VERSION%.*}/extra-cmake-modules-${VERSION}.tar.xz"
-PATCH_URI="5.9.0-cygwin.patch"
+PATCH_URI="
+	5.9.0-cygwin.patch
+	5.32.0-pythonmodgen.patch
+"
 
 ARCH=noarch

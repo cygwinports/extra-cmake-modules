@@ -1,0 +1,54 @@
+--- origsrc/extra-cmake-modules-5.32.0/find-modules/FindPythonModuleGeneration.cmake	2017-02-15 02:14:57.000000000 -0600
++++ src/extra-cmake-modules-5.32.0/find-modules/FindPythonModuleGeneration.cmake	2017-03-27 00:28:00.033645900 -0500
+@@ -191,17 +191,18 @@ if (NOT libclang_LIBRARY)
+   set(_LIBCLANG_FIND_VERSION ${_LIBCLANG_MAX_MAJOR_VERSION})
+   while(NOT libclang_LIBRARY AND NOT _LIBCLANG_FIND_VERSION EQUAL _LIBCLANG_MIN_MAJOR_VERSION)
+     math(EXPR _LIBCLANG_FIND_VERSION "${_LIBCLANG_FIND_VERSION} - 1")
+-    set(_GPB_CLANG_SUFFIX ${_LIBCLANG_FIND_VERSION}.0)
+-    find_library(libclang_LIBRARY clang-${_LIBCLANG_FIND_VERSION}.0)
++    find_file(libclang_LIBRARY NAMES libclang-${_LIBCLANG_FIND_VERSION}.0.so cygclang-${_LIBCLANG_FIND_VERSION}.0.dll)
+   endwhile()
+ 
+   if (NOT libclang_LIBRARY)
+-    find_library(libclang_LIBRARY clang-3.9)
++    find_file(libclang_LIBRARY NAMES libclang-3.9.so cygclang-3.9.dll)
+     if (NOT libclang_LIBRARY)
+-      find_library(libclang_LIBRARY clang-3.8)
++      find_file(libclang_LIBRARY NAMES libclang-3.8.so cygclang-3.8.dll)
+     endif()
+   endif()
+-else()
++endif()
++
++if (libclang_LIBRARY)
+   string(REGEX MATCH ".*clang-([0-9]+\\.[0-9]+).*" _GPB_CLANG_SUFFIX ${libclang_LIBRARY})
+   set(_GPB_CLANG_SUFFIX ${CMAKE_MATCH_1})
+ endif()
+@@ -436,12 +437,14 @@ headers = sipAPI${modulename_value}
+ 
+         target_compile_options(Py${pyversion}KF5${modulename_value} PRIVATE -fstack-protector-strong -Wno-deprecated-declarations -Wno-overloaded-virtual)
+         target_include_directories(Py${pyversion}KF5${modulename_value} PRIVATE ${GPB_SIP_INCLUDES})
+-        target_link_libraries(Py${pyversion}KF5${modulename_value} PRIVATE -Wl,-Bsymbolic-functions -Wl,-z,relro)
++        target_link_libraries(Py${pyversion}KF5${modulename_value} PRIVATE -Wl,-Bsymbolic-functions -fstack-protector-strong)
+ 
+         set_property(TARGET Py${pyversion}KF5${modulename_value} PROPERTY AUTOMOC OFF)
+         set_property(TARGET Py${pyversion}KF5${modulename_value} PROPERTY PREFIX "")
+         set_property(TARGET Py${pyversion}KF5${modulename_value} PROPERTY
+-            OUTPUT_NAME "${CMAKE_BINARY_DIR}/py${pyversion}/${pythonnamespace_value}/${modulename_value}")
++            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/py${pyversion}/${pythonnamespace_value}")
++        set_property(TARGET Py${pyversion}KF5${modulename_value} PROPERTY
++            OUTPUT_NAME "${modulename_value}")
+ 
+         if (GPB_SIP_DEPENDS MATCHES PyKF5)
+           set(_kf5_python_prefix ${CMAKE_INSTALL_PREFIX}/lib/python${pyversion${pyversion}_maj_min}/${GPB_INSTALL_DIR_SUFFIX})
+@@ -453,8 +456,8 @@ headers = sipAPI${modulename_value}
+             ${_kf5_python_prefix}
+         )
+ 
+-        install(DIRECTORY ${CMAKE_BINARY_DIR}/py${pyversion}/${pythonnamespace_value}
+-            DESTINATION lib/python${pyversion${pyversion}_maj_min}/${GPB_INSTALL_DIR_SUFFIX})
++        install(TARGETS Py${pyversion}KF5${modulename_value}
++            DESTINATION lib/python${pyversion${pyversion}_maj_min}/${GPB_INSTALL_DIR_SUFFIX}/${pythonnamespace_value})
+         install(FILES ${sip_files} "${CMAKE_CURRENT_BINARY_DIR}/sip/${pythonnamespace_value}/${modulename_value}/${modulename_value}mod.sip"
+           DESTINATION share/sip/${pythonnamespace_value}/${modulename_value}
+         )
