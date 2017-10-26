@@ -1,7 +1,7 @@
 inherit cmake python2
 
 NAME="extra-cmake-modules"
-VERSION=5.35.0
+VERSION=5.39.0
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Extra CMake Modules for KDE"
@@ -13,8 +13,8 @@ intended to be useful for any software that uses the CMake build system."
 HOMEPAGE="http://www.kde.org/"
 SRC_URI="mirror://kde/stable/frameworks/${VERSION%.*}/extra-cmake-modules-${VERSION}.tar.xz"
 PATCH_URI="
-	5.9.0-cygwin.patch
-	5.32.0-pythonmodgen.patch
+	5.39-ftm.patch
+	5.39-pythonmodgen.patch
 "
 
 ARCH=noarch
