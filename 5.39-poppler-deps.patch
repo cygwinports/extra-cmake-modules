@@ -1,0 +1,8 @@
+--- a/find-modules/FindPoppler.cmake
++++ b/find-modules/FindPoppler.cmake
+@@ -86,5 +86,4 @@
+ foreach(_comp ${Poppler_known_components})
+     string(TOLOWER "${_comp}" _lc_comp)
+-    set(Poppler_${_comp}_component_deps "Core")
+     set(Poppler_${_comp}_pkg_config "poppler-${_lc_comp}")
+     set(Poppler_${_comp}_lib "poppler-${_lc_comp}")

@@ -2,7 +2,7 @@ inherit cmake python2
 
 NAME="extra-cmake-modules"
 VERSION=5.39.0
-RELEASE=1
+RELEASE=2
 CATEGORY="Devel"
 SUMMARY="Extra CMake Modules for KDE"
 DESCRIPTION="The Extra CMake Modules package, or ECM, adds to the modules
@@ -15,6 +15,7 @@ SRC_URI="mirror://kde/stable/frameworks/${VERSION%.*}/extra-cmake-modules-${VERS
 PATCH_URI="
 	5.39-ftm.patch
 	5.39-pythonmodgen.patch
+	5.39-poppler-deps.patch
 "
 
 ARCH=noarch
